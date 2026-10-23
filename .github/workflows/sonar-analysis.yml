@@ -2,9 +2,13 @@ name: SonarCloud Analysis
 
 on:
   push:
-    branches: [ "develop", "master" ]
+    branches:
+      - develop
+      - master
   pull_request:
-    branches: [ "develop", "master" ]
+    branches:
+      - develop
+      - master
 
 jobs:
   build:
@@ -20,21 +24,24 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x' # ShareX modern 
- .NET 10
+          dotnet-version: '10.0.x'
 
       - name: Install SonarScanner
-        run: dotnet tool install --global dotnet-sonarscanner
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
 
       - name: Begin SonarCloud Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner begin /k:"justnoyes_ShareX" /o:"justnoyes" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        run: |
+          dotnet sonarscanner begin /k:"justnoyes_ShareX" /o:"justnoyes" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
 
       - name: Build Project
-        run: dotnet build --configuration Release
+        run: |
+          dotnet build --configuration Release
 
       - name: End SonarCloud Analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+        run: |
+          dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
