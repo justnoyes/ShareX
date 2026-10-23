@@ -38,7 +38,7 @@ jobs:
 
       - name: Build Project
         run: |
-          dotnet build --configuration Release
+          dotnet build ShareX.sln --configuration Release
 
       - name: End SonarCloud Analysis
         env:
